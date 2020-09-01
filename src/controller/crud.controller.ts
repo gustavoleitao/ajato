@@ -9,13 +9,7 @@ class CrudController implements Controller {
     private readonly Model:Model<any>
 
     constructor(amodel:AModel) {
-        try{
-            this.Model = MongooseManager.getInstance().mongoose().model(amodel.name())
-            console.log(`Achou! modelo ${amodel.name}`)
-        }catch (err){
-            console.log(`Não achou modelo. Compilando ${amodel.name}...`)
-            this.Model = MongooseManager.getInstance().mongoose().model<any>(amodel.name(), new Schema(amodel.schemaDefinition()))
-        }
+        this.Model = MongooseManager.getInstance().getMongooseModel(amodel)
     }
 
     public add(router:Router){

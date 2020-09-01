@@ -1,4 +1,5 @@
 import mongoose, {Connection, Document, Model, Schema} from 'mongoose'
+import { AModel } from '..'
 const actions = require('mongoose-rest-actions')
 
 class MongooseManager {
@@ -18,14 +19,22 @@ class MongooseManager {
         return MongooseManager.instance
     }
 
-    public connect(url='mongodb://localhost:27017/ajato-db'){
+     public async connect(url='mongodb://localhost:27017/ajato-db'){
         this.registerEvents()
-        this.db.connect(url, { useNewUrlParser: true, useUnifiedTopology: true})
+        await this.db.connect(url, { useNewUrlParser: true, useUnifiedTopology: true})
     }
 
     private configure(){
         console.log('Registering plugin. The order is critical. This plugin may be installed before registering models')
         this.db.plugin(actions)
+    }
+
+    public getMongooseModel(amodel:AModel):Model<any>{
+        try{
+            return MongooseManager.getInstance().mongoose().model(amodel.name())
+        }catch (err){
+            return MongooseManager.getInstance().mongoose().model<any>(amodel.name(), new Schema(amodel.schemaDefinition()))
+        }
     }
 
     private registerEvents(){

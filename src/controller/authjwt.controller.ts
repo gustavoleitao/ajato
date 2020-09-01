@@ -16,18 +16,12 @@ class AuthjwtController implements Controller {
     private userModel:AUser
     private readonly Model:Model<any>
 
-    constructor(userModel:AUser) {
+    constructor(userModel?:AUser) {
         this.refreshTokens = []
         this.accessSecret = 'auth-secret'
         this.refreshSecret = 'refresh-secret'
-        this.userModel = userModel
-        try{
-            this.Model = MongooseManager.getInstance().mongoose().model(userModel.name())
-            console.log(`Achou! modelo ${userModel.name}`)
-        }catch (err){
-            console.log(`Não achou modelo. Compilando ${userModel.name}...`)
-            this.Model = MongooseManager.getInstance().mongoose().model<any>(userModel.name(), new Schema(userModel.schemaDefinition()))
-        }
+        this.userModel = userModel != null ? userModel : new AUser()
+        this.Model = MongooseManager.getInstance().getMongooseModel(this.userModel)
     }
 
     add(router:Router){

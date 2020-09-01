@@ -7,12 +7,12 @@ app.use('/simple', new RouterBuilder()
     .add(new CrudController(new SimpleModel()))
     .routes())
 
-// app.use('/', new RouterBuilder()
-//     .add(new AuthjwtController(new AUser()))
-//     .routes())
+app.use('/user', new RouterBuilder()
+    .add(new CrudController(new AUser()))
+    .routes())
 
-// app.start('mongodb://localhost:27017/ajato-test-db', 3000, () => {
-//     console.log('iniciou')
-// })
+app.use('/', new RouterBuilder()
+    .add(new AuthjwtController())
+    .routes())
 
 export = app
