@@ -1,7 +1,7 @@
 {
   "name": "ajato",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Ajato is a simple library to write web-based microservices in Typescript!",
   "main": "lib/index",
   "typings": "lib/index",
   "scripts": {
@@ -10,9 +10,9 @@
     "build": "tsc -p .",
     "test": "mocha --file ./src/__tests__/setup.ts ./src/__tests__/*.spec.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["api", "express", "web", "http", "mongo", "mongoose"],
+  "author": "Gustavo Leitão <gustavo.leitao@imd.ufrn.br>",
+  "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.17.7",
