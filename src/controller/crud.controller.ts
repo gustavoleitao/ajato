@@ -54,8 +54,6 @@ class CrudController implements Controller {
     private _get(Model:any, router:Router){
         router.get('/', async (req:any, res: Response) => {
             const options:any = req.mquery
-            console.log(options)
-
             Model.get(options, (error:any, result:any) => {
                 if (error){
                     res.status(500).send(error)

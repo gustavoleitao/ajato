@@ -51,6 +51,3 @@ describe("Testing JWT Authentication", () => {
       })
 
 })
-
-
-

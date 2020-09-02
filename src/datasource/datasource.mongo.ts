@@ -50,6 +50,7 @@ class MongooseManager {
         this.db.connection.on('close', _ => {
             console.log('Database disconnected!')
         })
+        
     }
 
     public mongoose(){
