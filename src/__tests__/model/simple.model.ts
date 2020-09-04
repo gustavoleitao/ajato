@@ -5,7 +5,7 @@ interface IPost extends Document {
   body: string
 }
 
-class SimpleModel implements AModel {
+class SimpleModel extends AModel {
   name = () => 'Simple'
   schemaDefinition = () =>  {
     return {

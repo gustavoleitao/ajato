@@ -1,8 +1,8 @@
 import jwt, {VerifyErrors} from 'jsonwebtoken'
 import {Request, Response, Router} from 'express'
 import Middleware from "../arq/middleware";
-import Controller = require("../arq/controller");
-import AUser = require('../model/user.model');
+import Controller = require("../arq/controller")
+import {AUser} from '../model/user.model'
 import MongooseManager from '../datasource/datasource.mongo'
 import {Schema, Model} from 'mongoose'
 
@@ -20,6 +20,8 @@ class AuthjwtController implements Controller {
         this.refreshTokens = []
         this.accessSecret = 'auth-secret'
         this.refreshSecret = 'refresh-secret'
+        process.env.ACCESS_TOKEN_SECRET = this.accessSecret
+        process.env.REFRESH_TOKEN_SECRET = this.refreshSecret
         this.userModel = userModel != null ? userModel : new AUser()
         this.Model = MongooseManager.getInstance().getMongooseModel(this.userModel)
     }

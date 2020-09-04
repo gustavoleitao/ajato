@@ -2,6 +2,7 @@ import { Schema, SchemaDefinition, Document } from 'mongoose';
 import MongooseManager from '../datasource/datasource.mongo'
 import AModel from '../arq/amodel'
 import { type } from 'os';
+import {Role, IRole} from './role.model'
 
 interface IAUser extends Document {
     name: string
@@ -9,9 +10,10 @@ interface IAUser extends Document {
     username: string
     email: string
     password: string
+    roles: [IRole]
 }
 
-class AUser implements AModel {
+class AUser extends AModel {
 
     name = () => 'User'
     
@@ -36,11 +38,13 @@ class AUser implements AModel {
             password: {
                 type: String,
                 required: true
-            }
+            },
+            roles: [new Role().schema()]
         }
         return schema
     }
 
 }
 
-export = AUser
+export { AUser }
+export type { IAUser }

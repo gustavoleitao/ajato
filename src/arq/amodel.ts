@@ -1,9 +1,12 @@
 import { Schema, Document, SchemaDefinition } from 'mongoose'
 
-interface AModel {
+abstract class AModel {
 
-    name():string
-    schemaDefinition():SchemaDefinition
+    abstract name():string
+    abstract schemaDefinition():SchemaDefinition
+    schema(){
+        return new Schema(this.schemaDefinition())
+    }
 
 }
 
