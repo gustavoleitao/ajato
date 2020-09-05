@@ -9,7 +9,12 @@ before(function (done) {
         const mongoose =  app.db()
         const collections = await mongoose.connection.db.collections()
         for (let collection of collections) {
-            await collection.deleteOne({})
+            try{
+                await collection.remove({})
+            }catch (err){
+                console.error(err)
+                console.error('Falha ao dropar collections, Possivelmente esteja vazia.')
+            }
        }
         done()
     })

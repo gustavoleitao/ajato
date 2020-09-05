@@ -15,7 +15,8 @@ class Role extends AModel {
         return {
             name: {
                 type: String,
-                required: true
+                required: true,
+                unique: true
             }
          }
     }

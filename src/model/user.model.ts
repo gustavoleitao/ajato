@@ -1,5 +1,4 @@
 import { Schema, SchemaDefinition, Document } from 'mongoose';
-import MongooseManager from '../datasource/datasource.mongo'
 import AModel from '../arq/amodel'
 import { type } from 'os';
 import {Role, IRole} from './role.model'
@@ -10,6 +9,7 @@ interface IAUser extends Document {
     username: string
     email: string
     password: string
+    createdAt: Date
     roles: [IRole]
 }
 
@@ -25,7 +25,7 @@ class AUser extends AModel {
             },
             username: {
                 type: String,
-                required: true
+                required: true,
             },
             email: {
                 type: String,
@@ -39,8 +39,14 @@ class AUser extends AModel {
                 type: String,
                 required: true
             },
-            roles: [new Role().schema()]
+            roles: [{type: Schema.Types.ObjectId, ref: new Role().name()}]
         }
+        return schema
+    }
+
+    postDefinition(schema:Schema):Schema{
+        schema.index({ realm: 1, username: 1 }, { unique: true })
+        schema.index({ realm: 1, email: 1 }, { unique: true })
         return schema
     }
 

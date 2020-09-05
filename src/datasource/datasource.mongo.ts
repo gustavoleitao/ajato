@@ -33,7 +33,7 @@ class MongooseManager {
         try{
             return MongooseManager.getInstance().mongoose().model(amodel.name())
         }catch (err){
-            return MongooseManager.getInstance().mongoose().model<any>(amodel.name(), new Schema(amodel.schemaDefinition()))
+            return MongooseManager.getInstance().mongoose().model<any>(amodel.name(), amodel.schema())
         }
     }
 

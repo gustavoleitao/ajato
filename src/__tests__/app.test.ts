@@ -1,5 +1,6 @@
 import ajato, {Ajato, RouterBuilder, CrudController, AuthjwtController, AUser} from '../index'
 import SimpleModel from './model/simple.model'
+import EmbedModel from './model/embed.model'
 import RestrictController from './controller/restrict.controller'
 
 const app:Ajato = ajato()
@@ -10,6 +11,10 @@ app.use('/', new RouterBuilder()
 
 app.use('/simple', new RouterBuilder()
     .add(new CrudController(new SimpleModel()))
+    .routes())
+
+app.use('/embed', new RouterBuilder()
+    .add(new CrudController(new EmbedModel()))
     .routes())
 
 app.use('/restrict', new RouterBuilder()

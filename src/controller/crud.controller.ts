@@ -9,9 +9,11 @@ const { deepParseJson } = require('deep-parse-json')
 class CrudController implements Controller {
 
     private readonly Model:Model<any>
+    private embedPath:string
 
-    constructor(amodel:AModel) {
+    constructor(amodel:AModel, embedPath:string = "") {
         this.Model = MongooseManager.getInstance().getMongooseModel(amodel)
+        this.embedPath = embedPath
     }
 
     public add(router:Router){
@@ -34,7 +36,7 @@ class CrudController implements Controller {
 
     protected post(Model:Model<any>, router:Router, isPublic:boolean=true){
 
-        router.post('/', authcallback(isPublic), async (req: Request, res: Response, nextFunction:NextFunction) => {
+        router.post(`/${this.embedPath}`, authcallback(isPublic), async (req: Request, res: Response, nextFunction:NextFunction) => {
         
             try{
                 const localModel = new Model(this.parseBody(req))
@@ -54,7 +56,7 @@ class CrudController implements Controller {
     }
 
     protected getById(Model:Model<any>, router:Router){
-        router.get('/:id', async (req:Request, res:Response) =>{
+        router.get(`/${this.embedPath}:id`, async (req:Request, res:Response) =>{
             try{
                 const data = await Model.findById(req.params.id)
                 res.status(200).send(data)
@@ -65,7 +67,7 @@ class CrudController implements Controller {
     }
 
     protected get(Model:any, router:Router){
-        router.get('/', async (req:any, res: Response) => {
+        router.get(`/${this.embedPath}`, async (req:any, res: Response) => {
             const options:any = req.mquery
             Model.get(options, (error:any, result:any) => {
                 if (error){
@@ -78,7 +80,7 @@ class CrudController implements Controller {
     }
 
     protected delete(Model:Model<any>, router:Router){
-        router.delete('/:id', async (req:Request, res:Response) =>{
+        router.delete(`/${this.embedPath}:id`, async (req:Request, res:Response) =>{
             try{
                 const deletedModel = await Model.deleteOne({_id: req.params.id})
                 res.status(200).send(deletedModel)
@@ -89,7 +91,7 @@ class CrudController implements Controller {
     }
 
     protected put(Model:Model<any>, router:Router){
-        router.put('/:id', async (req:Request, res: Response) => {
+        router.put(`/${this.embedPath}:id`, async (req:Request, res: Response) => {
             try{
                 const updatedModel = await Model.replaceOne({_id: req.params.id}, this.parseBody(req))
                 res.status(200).send(updatedModel)
@@ -100,9 +102,9 @@ class CrudController implements Controller {
     }
 
     protected patch(Model:Model<any>, router:Router){
-        router.patch('/:id', async (req: Request, res: Response) => {
+        router.patch(`/${this.embedPath}:id`, async (req: Request, res: Response) => {
             try{
-                const patchedModel = await Model.updateOne({_id: req.params.id}, this.parseBody(req))
+                const patchedModel = await Model.updateOne({_id: req.params.id}, this.parseBody(req), { runValidators: true })
                 res.status(200).send(patchedModel)
             }catch (err){
                 res.status(500).send(err)
