@@ -1,4 +1,4 @@
-import ajato, {Ajato, RouterBuilder, CrudController, AuthjwtController, AUser} from '../index'
+import ajato, {Ajato, RouterBuilder, CrudController, AuthjwtController, AUser, UserController} from '../index'
 import SimpleModel from './model/simple.model'
 import EmbedModel from './model/embed.model'
 import RestrictController from './controller/restrict.controller'
@@ -22,7 +22,7 @@ app.use('/restrict', new RouterBuilder()
     .routes())
 
 app.use('/user', new RouterBuilder()
-    .add(new CrudController(new AUser()))
+    .add(new UserController())
     .routes())
 
 export = app

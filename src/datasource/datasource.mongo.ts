@@ -1,16 +1,16 @@
 import mongoose, {Connection, Document, Model, Schema} from 'mongoose'
-import { AModel } from '..'
+import { AModel } from '../arq/amodel'
 const actions = require('mongoose-rest-actions')
+import logger from '../util/logger'
 
 class MongooseManager {
 
     private static instance: MongooseManager
+    private db = mongoose
 
     private constructor() {
         this.configure()
     }
-
-    private db = mongoose
 
     public static getInstance(): MongooseManager {
         if (!MongooseManager.instance) {
@@ -25,30 +25,30 @@ class MongooseManager {
     }
 
     private configure(){
-        console.log('Registering plugin. The order is critical. This plugin may be installed before registering models')
         this.db.plugin(actions)
     }
 
     public getMongooseModel(amodel:AModel):Model<any>{
         try{
-            return MongooseManager.getInstance().mongoose().model(amodel.name())
+            return this.mongoose().model(amodel.name())
         }catch (err){
-            return MongooseManager.getInstance().mongoose().model<any>(amodel.name(), amodel.schema())
+            logger.debug('Registering model %s', amodel.name())
+            return this.mongoose().model<any>(amodel.name(), amodel.schema())
         }
     }
 
     private registerEvents(){
 
         this.db.connection.once('open', _ => {
-            console.log('Database connected!')
+            logger.info('Database connected!')
         })
 
         this.db.connection.on('error', err => {
-          console.error('Database connection error:', err)
+            logger.error('Database connected!', err)
         })
 
         this.db.connection.on('close', _ => {
-            console.log('Database disconnected!')
+            logger.info('Database disconnected!')
         })
         
     }

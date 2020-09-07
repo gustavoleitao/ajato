@@ -1,5 +1,4 @@
-import { Schema, Document, SchemaDefinition } from 'mongoose'
-import {AUser} from '../model/user.model'
+import { Schema, SchemaDefinition, Document } from 'mongoose'
 
 abstract class AModel {
 
@@ -14,7 +13,7 @@ abstract class AModel {
             },
             createdBy: {
                 type: Schema.Types.ObjectId,
-                ref: new AUser().name()
+                ref: 'User'
             }
         }
         const schema = new Schema({...this.schemaDefinition(), ...schemaDef})
@@ -27,4 +26,4 @@ abstract class AModel {
 
 }
 
-export = AModel
+export {AModel}

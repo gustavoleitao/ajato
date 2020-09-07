@@ -1,10 +1,12 @@
 import {Model, Schema} from 'mongoose'
 import {Request, Response, Router, NextFunction} from 'express'
 import Controller from '../arq/controller'
-import AModel from '../arq/amodel'
+import { AModel } from '../arq/amodel'
 import MongooseManager from '../datasource/datasource.mongo'
-import authcallback from '../middleware/auth.middleware'
-const { deepParseJson } = require('deep-parse-json')
+import authenticationMiddleware from '../middleware/authentication.middleware'
+import authorizationMiddleware from '../middleware/authorization.middleware'
+import { IRole, Role } from '../model/role.model'
+
 
 class CrudController implements Controller {
 
@@ -25,21 +27,13 @@ class CrudController implements Controller {
         this.delete(this.Model, router)
     }
 
-    private parseBody(req: Request):any{
-        try{
-            const stringfyBody = JSON.stringify(req.body)
-            return deepParseJson(stringfyBody)
-        }catch(err) {
-            return req.body
-        }
-    }
+    protected post(Model:Model<any>, router:Router, isPublic:boolean=true, roles:IRole[]=[]){
 
-    protected post(Model:Model<any>, router:Router, isPublic:boolean=true){
-
-        router.post(`/${this.embedPath}`, authcallback(isPublic), async (req: Request, res: Response, nextFunction:NextFunction) => {
+        router.post(`/${this.embedPath}`, authenticationMiddleware(isPublic), async (req: Request, res: Response, nextFunction:NextFunction) => {
         
             try{
-                const localModel = new Model(this.parseBody(req))
+
+                const localModel = new Model(req.body)
                 let doc = await localModel.save()
                 res.status(201).send(doc)
             }catch (err){
@@ -93,7 +87,7 @@ class CrudController implements Controller {
     protected put(Model:Model<any>, router:Router){
         router.put(`/${this.embedPath}:id`, async (req:Request, res: Response) => {
             try{
-                const updatedModel = await Model.replaceOne({_id: req.params.id}, this.parseBody(req))
+                const updatedModel = await Model.replaceOne({_id: req.params.id}, req.body)
                 res.status(200).send(updatedModel)
             }catch (err){
                 res.status(500).send(err)
@@ -104,7 +98,7 @@ class CrudController implements Controller {
     protected patch(Model:Model<any>, router:Router){
         router.patch(`/${this.embedPath}:id`, async (req: Request, res: Response) => {
             try{
-                const patchedModel = await Model.updateOne({_id: req.params.id}, this.parseBody(req), { runValidators: true })
+                const patchedModel = await Model.updateOne({_id: req.params.id}, req.body, { runValidators: true })
                 res.status(200).send(patchedModel)
             }catch (err){
                 res.status(500).send(err)

@@ -1,4 +1,4 @@
-import {Router} from 'express'
+import { Router } from 'express'
 
 interface ARouter {
     add(router:Router):void

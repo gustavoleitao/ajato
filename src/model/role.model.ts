@@ -1,5 +1,5 @@
-import AModel from "../arq/amodel";
-import { SchemaDefinition } from "mongoose";
+import { AModel } from "../arq/amodel"
+import { SchemaDefinition, Document } from 'mongoose'
 
 interface IRole extends Document {
     name: string

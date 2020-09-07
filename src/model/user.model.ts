@@ -1,6 +1,5 @@
-import { Schema, SchemaDefinition, Document } from 'mongoose';
-import AModel from '../arq/amodel'
-import { type } from 'os';
+import { Schema, SchemaDefinition, Document } from 'mongoose'
+import { AModel } from '../arq/amodel'
 import {Role, IRole} from './role.model'
 
 interface IAUser extends Document {

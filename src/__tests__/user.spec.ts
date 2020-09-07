@@ -3,7 +3,6 @@ import request from "request"
 
 const baseUrl:string = 'http://localhost:3000'
 
-
 describe("Testing User API", () => {
 
     it("POST /user ok", (done) => {

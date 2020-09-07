@@ -3,10 +3,10 @@ import CrudController from './controller/crud.controller'
 import UserController from './controller/user.controller'
 import AuthjwtController from './controller/authjwt.controller'
 import Middleware from './arq/middleware'
-import AModel from './arq/amodel'
+import { AModel } from './arq/amodel'
 import Ajato from './ajato'
 import RouterBuilder from './util/router.builder'
-import { Schema, Document, Model} from 'mongoose'
+import { Schema, SchemaDefinition, Document, Model} from 'mongoose'
 import {AUser, IAUser} from './model/user.model'
 import {Router} from 'express'
 
@@ -24,6 +24,7 @@ export {
     Middleware, 
     Schema, 
     Document, 
+    SchemaDefinition,
     Model,
     AUser,
     IAUser,

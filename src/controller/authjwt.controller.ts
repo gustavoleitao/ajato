@@ -1,6 +1,5 @@
 import jwt, {VerifyErrors} from 'jsonwebtoken'
 import {Request, Response, Router} from 'express'
-import Middleware from "../arq/middleware";
 import Controller = require("../arq/controller")
 import {AUser} from '../model/user.model'
 import MongooseManager from '../datasource/datasource.mongo'

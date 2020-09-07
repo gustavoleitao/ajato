@@ -10,7 +10,7 @@ before(function (done) {
         const collections = await mongoose.connection.db.collections()
         for (let collection of collections) {
             try{
-                await collection.remove({})
+                await collection.deleteMany({})
             }catch (err){
                 console.error(err)
                 console.error('Falha ao dropar collections, Possivelmente esteja vazia.')

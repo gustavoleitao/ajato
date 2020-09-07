@@ -4,8 +4,10 @@ const mquery = require('express-mquery')
 import RouterBuilder from './util/router.builder'
 import RootController from './controller/root.controller'
 import MongooseManager from './datasource/datasource.mongo'
-import AModel from './arq/amodel'
+import { AModel } from './arq/amodel'
 import { Schema } from 'mongoose'
+import startupMongo from './datasource/startup.mongo'
+import logger from './util/logger'
 
 class Ajato {
 
@@ -40,16 +42,22 @@ class Ajato {
     private configureExpress(){
         this.express.use(express.json())
         this.express.use(bodyParser.urlencoded({ extended: true }))
+        this.express.use(bodyParser.json())
         this.express.use(mquery({ limit: 200, maxLimit: 1000 }))
         this.addBasicRoutes()
     }
 
     public async start(mongoUrl='mongodb://localhost:27017/user-db-2', port=3000, callback?: (...args: any[]) => void){
         await this.mongo.connect(mongoUrl)
+        await this.configureDb()
         this.server = this.express.listen(port, () => {
-            console.log(`Server running on port ${port}`)
+            logger.info(`Server running on port %d`, port)
             if (callback !== undefined) callback()
         })
+    }
+
+    private async configureDb(){
+        await startupMongo.initDb()
     }
 
     public db(){
