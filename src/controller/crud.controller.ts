@@ -3,14 +3,11 @@ import {Request, Response, Router, NextFunction} from 'express'
 import Controller from '../arq/controller'
 import { AModel } from '../arq/amodel'
 import MongooseManager from '../datasource/datasource.mongo'
-import authenticationMiddleware from '../middleware/authentication.middleware'
-import authorizationMiddleware from '../middleware/authorization.middleware'
-import { IRole, Role } from '../model/role.model'
-
+import authMiddleware from '../middleware/auth.middleware'
 
 class CrudController implements Controller {
 
-    private readonly Model:Model<any>
+    protected readonly Model:Model<any>
     private embedPath:string
 
     constructor(amodel:AModel, embedPath:string = "") {
@@ -27,12 +24,11 @@ class CrudController implements Controller {
         this.delete(this.Model, router)
     }
 
-    protected post(Model:Model<any>, router:Router, isPublic:boolean=true, roles:IRole[]=[]){
+    protected post(Model:Model<any>, router:Router, roles:string[]=['$public']){
 
-        router.post(`/${this.embedPath}`, authenticationMiddleware(isPublic), async (req: Request, res: Response, nextFunction:NextFunction) => {
+        router.post(`/${this.embedPath}`, authMiddleware(roles), async (req: Request, res: Response, nextFunction:NextFunction) => {
         
             try{
-
                 const localModel = new Model(req.body)
                 let doc = await localModel.save()
                 res.status(201).send(doc)
@@ -49,8 +45,8 @@ class CrudController implements Controller {
 
     }
 
-    protected getById(Model:Model<any>, router:Router){
-        router.get(`/${this.embedPath}:id`, async (req:Request, res:Response) =>{
+    protected getById(Model:Model<any>, router:Router, roles:string[]=['$public']){
+        router.get(`/${this.embedPath}:id`, authMiddleware(roles), async (req:Request, res:Response) =>{
             try{
                 const data = await Model.findById(req.params.id)
                 res.status(200).send(data)
@@ -60,8 +56,8 @@ class CrudController implements Controller {
         })
     }
 
-    protected get(Model:any, router:Router){
-        router.get(`/${this.embedPath}`, async (req:any, res: Response) => {
+    protected get(Model:any, router:Router, roles:string[]=['$public']){
+        router.get(`/${this.embedPath}`, authMiddleware(roles), async (req:any, res: Response) => {
             const options:any = req.mquery
             Model.get(options, (error:any, result:any) => {
                 if (error){
@@ -73,8 +69,8 @@ class CrudController implements Controller {
         })
     }
 
-    protected delete(Model:Model<any>, router:Router){
-        router.delete(`/${this.embedPath}:id`, async (req:Request, res:Response) =>{
+    protected delete(Model:Model<any>, router:Router, roles:string[]=['$public']){
+        router.delete(`/${this.embedPath}:id`, authMiddleware(roles), async (req:Request, res:Response) =>{
             try{
                 const deletedModel = await Model.deleteOne({_id: req.params.id})
                 res.status(200).send(deletedModel)
@@ -84,8 +80,8 @@ class CrudController implements Controller {
         })
     }
 
-    protected put(Model:Model<any>, router:Router){
-        router.put(`/${this.embedPath}:id`, async (req:Request, res: Response) => {
+    protected put(Model:Model<any>, router:Router, roles:string[]=['$public']){
+        router.put(`/${this.embedPath}:id`, authMiddleware(roles), async (req:Request, res: Response) => {
             try{
                 const updatedModel = await Model.replaceOne({_id: req.params.id}, req.body)
                 res.status(200).send(updatedModel)
@@ -95,8 +91,8 @@ class CrudController implements Controller {
         })
     }
 
-    protected patch(Model:Model<any>, router:Router){
-        router.patch(`/${this.embedPath}:id`, async (req: Request, res: Response) => {
+    protected patch(Model:Model<any>, router:Router, roles:string[]=['$public']){
+        router.patch(`/${this.embedPath}:id`, authMiddleware(roles), async (req: Request, res: Response) => {
             try{
                 const patchedModel = await Model.updateOne({_id: req.params.id}, req.body, { runValidators: true })
                 res.status(200).send(patchedModel)

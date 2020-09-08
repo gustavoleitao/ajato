@@ -55,7 +55,7 @@ class AuthjwtController implements Controller {
         if (realm.length > 0) {
             query = { ...query, realm: realm }
         }
-        return await this.Model.findOne(query)
+        return await this.Model.findOne(query).populate('roles')
     }
 
     private _logout(router:Router){

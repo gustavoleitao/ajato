@@ -8,7 +8,7 @@ import Ajato from './ajato'
 import RouterBuilder from './util/router.builder'
 import { Schema, SchemaDefinition, Document, Model} from 'mongoose'
 import {AUser, IAUser} from './model/user.model'
-import {Router} from 'express'
+import {Router, Request, Response, NextFunction} from 'express'
 
 
 export default function () {return Ajato.getInstance()}
@@ -28,5 +28,8 @@ export {
     Model,
     AUser,
     IAUser,
-    Router
+    Router,
+    Request,
+    Response,
+    NextFunction
 }
