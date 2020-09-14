@@ -38,11 +38,11 @@ export default class SimpleModel extends AModel {
 }
 ```
 
-The shmema definitions uses moogoose sintaxe. More infos in https://mongoosejs.com/docs/guide.html#definition
+The shmema definition uses moogoose sintaxe. More infos in https://mongoosejs.com/docs/guide.html#definition
 
 ## Creating CRUD Operations
 
-Once you have defined a model, to create CRUD operations you just need to use the CrudController class:
+Once you have defined the model, you just need to use the CrudController class to create CRUD operations.
 
 ```typescript
 import ajato, {CrudController} from 'ajato'
