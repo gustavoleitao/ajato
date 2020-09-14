@@ -16,7 +16,7 @@ app.start()
 
 ## Creating models
 
-You have to extends AModel class and implement abstract methods to create a model. 
+You have to extends AModel class and implement abstract methods.
 
 ```typescript
 import {AModel} from 'ajato'
