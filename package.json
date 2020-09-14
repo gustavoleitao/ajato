@@ -1,6 +1,6 @@
 {
   "name": "ajato",
-  "version": "0.0.1-RC",
+  "version": "0.0.1-wip",
   "description": "Ajato is a simple library to write web-based microservices in Typescript!",
   "main": "lib/index",
   "typings": "lib/index",
