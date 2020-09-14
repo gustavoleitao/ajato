@@ -29,7 +29,6 @@ class RestrictController extends CrudController {
             }
         })
     }
-
 }
 
 export = RestrictController

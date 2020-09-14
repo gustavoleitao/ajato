@@ -3,6 +3,7 @@ import CrudController from './controller/crud.controller'
 import UserController from './controller/user.controller'
 import AuthjwtController from './controller/authjwt.controller'
 import Middleware from './arq/middleware'
+import authMiddleware from './middleware/auth.middleware'
 import { AModel } from './arq/amodel'
 import Ajato from './ajato'
 import RouterBuilder from './util/router.builder'
@@ -25,6 +26,7 @@ export {
     Schema, 
     Document, 
     SchemaDefinition,
+    authMiddleware,
     Model,
     AUser,
     IAUser,
