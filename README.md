@@ -9,7 +9,7 @@ Ajato is simple, fast and small! Ajato uses Mongoose Schema to model your data. 
 ## Getting start
 
 ```typescript
-import ajato from 'ajato'
+import ajato, { Ajato } from 'ajato'
 const app:Ajato = ajato()
 app.start()
 ```
@@ -53,4 +53,6 @@ const app:Ajato = ajato()
 app.use('/simple', new RouterBuilder()
     .add(new CrudController(new SimpleModel()))
     .routes())
+
+app.start()
 ```

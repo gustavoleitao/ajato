@@ -18,6 +18,10 @@
     "mongo",
     "mongoose"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gustavoleitao/ajato.git"
+  },
   "author": "Gustavo Leitão <gustavo.leitao@imd.ufrn.br>",
   "license": "MIT",
   "devDependencies": {

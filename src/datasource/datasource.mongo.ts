@@ -21,7 +21,7 @@ class MongooseManager {
 
      public async connect(url='mongodb://localhost:27017/ajato-db'){
         this.registerEvents()
-        await this.db.connect(url, { useNewUrlParser: true, useUnifiedTopology: true})
+        await this.db.connect(url, { useNewUrlParser: true, useUnifiedTopology: true,  useCreateIndex: true})
     }
 
     private configure(){
