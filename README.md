@@ -59,12 +59,13 @@ const app:Ajato = ajato()
 app.use('/simple', new RouterBuilder()
     .add(new CrudController(new SimpleModel()))
     .routes())
+
 app.start()
 ```
 
 ## Authentication
 
-Ajato implements JWT Token natively to authentication and authorization:
+Ajato implements [JWT Token](https://jwt.io/) natively to authentication and authorization:
 
 ```typescript
 import ajato, {Ajato, RouterBuilder, AuthjwtController} from 'ajato'
