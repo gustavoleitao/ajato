@@ -47,7 +47,7 @@ class Ajato {
         this.addBasicRoutes()
     }
 
-    public async start(mongoUrl='mongodb://localhost:27017/user-db-2', port=3000, callback?: (...args: any[]) => void){
+    public async start(mongoUrl='mongodb://localhost:27017/user-db', port=3000, callback?: (...args: any[]) => void){
         await this.mongo.connect(mongoUrl)
         await this.configureDb()
         this.server = this.express.listen(port, () => {

@@ -59,6 +59,49 @@ const app:Ajato = ajato()
 app.use('/simple', new RouterBuilder()
     .add(new CrudController(new SimpleModel()))
     .routes())
+app.start()
+```
+
+## Authentication
+
+Ajato implements JWT Token natively to authentication and authorization:
+
+```typescript
+import ajato, {Ajato, RouterBuilder, AuthjwtController} from 'ajato'
+const app:Ajato = ajato()
+
+app.use('/', new RouterBuilder()
+    .add(new AuthjwtController())
+    .routes())
 
 app.start()
+```
+
+Once you have authentication enabled, it is important manage the users. To do that, Ajato provides a basic user model and controller:
+
+```typescript
+import ajato, {Ajato, RouterBuilder, AuthjwtController, UserController} from 'ajato'
+const app:Ajato = ajato()
+
+app.use('/', new RouterBuilder()
+    .add(new AuthjwtController())
+    .routes())
+
+app.use('/user', new RouterBuilder()
+    .add(new UserController())
+    .routes())
+
+app.start()
+```
+
+## Options
+
+You can define MongoDB URI, web server port and callback:
+
+```typescript
+import ajato, { Ajato } from 'ajato'
+const app:Ajato = ajato()
+app.start('http://localhost:27017/mydb', 5000, () => {
+  console.log('Ajato is on fire on port 5000!')
+})
 ```
