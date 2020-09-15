@@ -8,6 +8,12 @@ Ajato is simple, fast and small! Ajato uses Mongoose Schema to model your data. 
 
 ## Getting start
 
+```console
+$ npm install ajato
+```
+
+Minimum code to start ajato:
+
 ```typescript
 import ajato, { Ajato } from 'ajato'
 const app:Ajato = ajato()
