@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "deep-parse-json": "^1.0.1",
     "express": "^4.17.1",

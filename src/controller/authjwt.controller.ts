@@ -4,6 +4,7 @@ import Controller = require("../arq/controller")
 import {AUser} from '../model/user.model'
 import MongooseManager from '../datasource/datasource.mongo'
 import {Schema, Model} from 'mongoose'
+import Crypt from '../util/crypt'
 
 const EXPIRES = process.env.EXPIRES_IN || '1m'
 
@@ -14,6 +15,7 @@ class AuthjwtController implements Controller {
     private refreshSecret:string
     private userModel:AUser
     private readonly Model:Model<any>
+    private crypt:Crypt
 
     constructor(userModel?:AUser) {
         this.refreshTokens = []
@@ -23,6 +25,7 @@ class AuthjwtController implements Controller {
         process.env.REFRESH_TOKEN_SECRET = this.refreshSecret
         this.userModel = userModel != null ? userModel : new AUser()
         this.Model = MongooseManager.getInstance().getMongooseModel(this.userModel)
+        this.crypt = new Crypt()
     }
 
     add(router:Router){
@@ -35,15 +38,29 @@ class AuthjwtController implements Controller {
         router.post('/login', async (req:Request, res:Response) => {
             const userDb = await this.findUser(req)
             if (userDb != null && userDb !== undefined){
-                const payload = userDb.toJSON()
-                const accessToken = jwt.sign(payload, this.accessSecret, {expiresIn: EXPIRES})
-                const refreshToken = jwt.sign(payload, this.refreshSecret)
-                this.refreshTokens.push(refreshToken)
-                res.json({accessToken: accessToken, refreshToken: refreshToken})
+
+                if (await this.checkPassword(req, res, userDb.password)){
+                    const payload = userDb.toJSON()
+                    const accessToken = jwt.sign(payload, this.accessSecret, {expiresIn: EXPIRES})
+                    const refreshToken = jwt.sign(payload, this.refreshSecret)
+                    this.refreshTokens.push(refreshToken)
+                    res.json({accessToken: accessToken, refreshToken: refreshToken})
+                }else{
+                    res.sendStatus(403)
+                }
+  
             }else{
                 res.sendStatus(403)
             }
         })
+    }
+
+    private async checkPassword(req:Request, res:Response, password:string){
+        try{
+            return await this.crypt.compare(req.body.password, password)
+        }catch(err){
+            res.sendStatus(403)
+        }
     }
 
     private async findUser(req:Request) {
@@ -51,8 +68,8 @@ class AuthjwtController implements Controller {
         const pass: string = req.body.password
         const realm: string = req.body.realm
 
-        let query: { username: string; password: string; realm?: string; } = { username: username, password: pass }
-        if (realm.length > 0) {
+        let query: { username: string; realm?: string; } = { username: username }
+        if (realm !== undefined && realm.length > 0) {
             query = { ...query, realm: realm }
         }
         return await this.Model.findOne(query).populate('roles')

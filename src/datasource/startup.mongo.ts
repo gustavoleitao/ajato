@@ -1,5 +1,6 @@
 import MongooseManager from "./datasource.mongo"
 import { Role } from "../model/role.model"
+import logger from '../util/logger'
 
 class StartupMongo {
 
@@ -15,7 +16,7 @@ class StartupMongo {
             const modelDocument = new RoleModel(def)
             await modelDocument.save()
         }catch (err){
-            console.warn(`Falied to create model: ${def}. Probably this role alredy exists in database.`)
+            logger.warn(`Failed to create model: ${def.name}. Probably this role alredy exists in database.`)
         }
     }
 

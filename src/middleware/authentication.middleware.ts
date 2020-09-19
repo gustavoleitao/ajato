@@ -6,7 +6,6 @@ interface IAuthRequest extends Request {
     user: IAUser
 }
 
-
 function authorization(req: IAuthRequest, res: Response, next: NextFunction):boolean {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]

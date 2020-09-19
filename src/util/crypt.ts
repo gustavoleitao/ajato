@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+import bcrypt from 'bcrypt'
 
 class Crypt {
 
@@ -6,7 +6,7 @@ class Crypt {
     return await bcrypt.hash(data, 10)
   }
 
-  async compare(data:any, encrypted:String){
+  async compare(data:any, encrypted:string):Promise<boolean>{
     return await bcrypt.compare(data, encrypted)
   }
 

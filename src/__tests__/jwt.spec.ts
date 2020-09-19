@@ -15,7 +15,7 @@ describe("Testing JWT Authentication", () => {
     let accessToken:string
 
     it("POST /login ok", (done) => {
-        request.post(baseUrl + '/login', {form:{ username: 'galileu', password: 'solcentro', realm: 'geo' }}, (error, response, body) => {
+        request.post(baseUrl + '/login', {form: { username: 'galileu', password: 'solcentro', realm: 'geo' }}, (error, response, body) => {
             const result = JSON.parse(body)
             equal(200, response.statusCode)
             notEqual(undefined, result.accessToken)
