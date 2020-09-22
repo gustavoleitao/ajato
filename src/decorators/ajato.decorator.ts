@@ -1,6 +1,5 @@
 import Metadata from '../util/metadata'
 import HttpMethod from '../arq/httpmethods'
-import "reflect-metadata"
 
 function Controller(path:string) {
     return function(target: Function){
@@ -9,7 +8,17 @@ function Controller(path:string) {
     }
 }
 
-function Get(path:string="/") {
+function Auth(roles:string[]=['$loged']){
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
+    Metadata.getInstance().registerRoles(target.constructor.name, propertyKey, roles)
+  }
+}
+
+function Get(path:string="/") { 
     return function (
       target: any,
       propertyKey: string,
@@ -82,5 +91,6 @@ export {
   Patch,
   Put,
   Delete,
-  All
+  All,
+  Auth
 }

@@ -7,11 +7,13 @@ export default class Metadata {
     private pathsByClass: { [name: string] : {path: string} }
     private pathsBySuperClass: { [name: string] : {path: string } }
     private routes : { [target: string] : {path: string, type:HttpMethod, name:string, action:Function, object:any}[] }
+    private roles : { [target: string] : {roles:string[]} }
 
     private constructor() { 
         this.pathsByClass  = {}
         this.pathsBySuperClass  = {}
         this.routes  = {}
+        this.roles =  {}
     }
 
     public static getInstance(): Metadata {
@@ -24,6 +26,11 @@ export default class Metadata {
     public registerPaths(className:string, path:string, superclass:string) {
         this.pathsByClass[className] = {path: path}
         this.pathsBySuperClass[superclass] = {path: path}
+    }
+
+    public registerRoles(target: string, name:string, roles:string[]) {
+        const key = `${target}.${name}`
+        this.roles[key] = {roles: roles}
     }
 
     public registerMethods(target: string, path:string, type:HttpMethod, name:string, func:Function, object:any) {
@@ -47,9 +54,19 @@ export default class Metadata {
         }
     }
 
+    public rolesFromMethod(target: string, name:string):string[]{
+        const key = `${target}.${name}`
+        if (this.roles[key] !== undefined){
+            return this.roles[key].roles
+        }else{
+            return ["$public"]
+        }
+    }
+
     public print(){
         console.log(this.pathsByClass)
         console.log(this.routes)
+        console.log(this.roles)
     }
 
 }

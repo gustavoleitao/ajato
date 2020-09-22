@@ -8,7 +8,9 @@ interface IAuthRequest extends Request {
 }
 
 function authMiddleware(roles:string[]): RequestHandler {
+    const rolesFixo = roles;
     return (req, res, next) => {
+
         const reqAuth = req as IAuthRequest 
         const isPublic = roles.includes('$public')
 
@@ -27,7 +29,6 @@ function authMiddleware(roles:string[]): RequestHandler {
                     return
                 }
             }
-
         }
         
         next()

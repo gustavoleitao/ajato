@@ -1,15 +1,14 @@
+const mquery = require('express-mquery')
 import express, { Application, Request, Response, NextFunction, Router } from 'express'
 import bodyParser from 'body-parser'
-const mquery = require('express-mquery')
 import RouterBuilder from './util/router.builder'
 import RootController from './controller/root.controller'
 import MongooseManager from './datasource/datasource.mongo'
-import { AModel } from './arq/amodel'
-import { Schema } from 'mongoose'
 import startupMongo from './datasource/startup.mongo'
 import logger from './util/logger'
 import Metadata from './util/metadata'
 import HttpMethods from './arq/httpmethods'
+import authMiddleware from './middleware/auth.middleware'
 
 class Ajato {
 
@@ -47,7 +46,6 @@ class Ajato {
         this.express.use(bodyParser.json())
         this.express.use(mquery({ limit: 200, maxLimit: 1000 }))
         this.addBasicRoutes()
-        console.log('finished configureExpress')
     }
 
     public async start(mongoUrl = 'mongodb://localhost:27017/user-db', port = 3000, callback?: (...args: any[]) => void) {
@@ -60,56 +58,54 @@ class Ajato {
         })
     }
 
-    public registerController(path: string, func: any){
+    private configureRoutes() {
         const metadata = Metadata.getInstance()
-    }
-
-    configureRoutes() {
-        const metadata = Metadata.getInstance()
-        const router: Router = express.Router()
         const routes = metadata.getRoutes()
         const _self = this
 
         Object.keys(routes).forEach(function (target) {
             const methodsData = routes[target]
+            logger.debug('Generating new router to target %s', target)
+            let router: Router = express.Router()
             methodsData.forEach(method => {
-                logger.info('Registering %s %s at %s', method.type, method.path, metadata.pathFromTarget(target))
-                _self.addMethodToRouter(router, method)
+                const roles:string[] = metadata.rolesFromMethod(target, method.name)
+                logger.info('Registering %s %s at %s and roles %s', method.type, method.path, metadata.pathFromTarget(target), roles)
+                _self.addMethodToRouter(router, roles, target, method)
             });
             _self.express.use(metadata.pathFromTarget(target), router)
         });
     }
 
-    addMethodToRouter(router: Router, method: { path: string; type: HttpMethods; name: string; action: Function, object: any}) {
+    private addMethodToRouter(router: Router, localRoles:string[], target:string, method: { path: string; type: HttpMethods; name: string; action: Function, object: any}) {
         switch (method.type) {
             case HttpMethods.GET:
-                router.get(method.path, async (req: Request, res: Response) => { 
+                router.get(method.path, authMiddleware(localRoles), async (req: Request, res: Response, next:NextFunction) => { 
                     await new method.object.constructor()[method.name](req, res)
                 })
                 break
             case HttpMethods.POST:
-                router.post(method.path, async (req: Request, res: Response) => { 
+                router.post(method.path, authMiddleware(localRoles), async (req: Request, res: Response, next:NextFunction) => { 
                     await new method.object.constructor()[method.name](req, res)
                 })
                 break
             case HttpMethods.PATH:
-                router.patch(method.path, async (req: Request, res: Response) => { 
-                    await new method.object.constructor()[method.name](req, res) 
+                router.patch(method.path, authMiddleware(localRoles), async (req: Request, res: Response, next:NextFunction) => { 
+                    await new method.object.constructor()[method.name](req, res)
                 })
                 break
             case HttpMethods.PUT:
-                router.put(method.path, async (req: Request, res: Response) => { 
-                    await new method.object.constructor()[method.name](req, res) 
+                router.put(method.path, authMiddleware(localRoles), async (req: Request, res: Response, next:NextFunction) => { 
+                    await new method.object.constructor()[method.name](req, res)
                 })
                 break
             case HttpMethods.DELETE:
-                router.delete(method.path, async (req: Request, res: Response) => { 
-                    await new method.object.constructor()[method.name](req, res) 
+                router.delete(method.path, authMiddleware(localRoles), async (req: Request, res: Response, next:NextFunction) => { 
+                    await new method.object.constructor()[method.name](req, res)
                 })
                 break
             case HttpMethods.ALL:
-                router.all(method.path, async (req: Request, res: Response) => { 
-                    await new method.object.constructor()[method.name](req, res) 
+                router.all(method.path, authMiddleware(localRoles), async (req: Request, res: Response, next:NextFunction) => { 
+                    await new method.object.constructor()[method.name](req, res)
                 })
                 break
         }
@@ -130,6 +126,10 @@ class Ajato {
     public shutdown(callback?: (...args: any[]) => void) {
         this.server.close()
         this.mongo.db.connection.close(callback)
+    }
+
+    public add(controller:any){
+        logger.debug('Registering Controller %s', controller.constructor.name)
     }
 
     public use(path: string, func: any) {

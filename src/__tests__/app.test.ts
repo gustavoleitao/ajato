@@ -1,13 +1,15 @@
 import ajato, {Ajato, RouterBuilder, CrudController, AuthjwtController, AUser, UserController} from '../index'
 import SimpleModel from './model/simple.model'
 import EmbedModel from './model/embed.model'
-import RestrictController from './controller/restrict.controller'
 
+import RestrictController from './controller/restrict.controller'
 import SimpleController from './controller/simple.controller'
+import RestrictV2Controller from './controller/restrictv2.controller'
 
 const app:Ajato = ajato()
 
-const myInstsamce:SimpleController = new SimpleController()
+app.add(new SimpleController())
+app.add(new RestrictV2Controller())
 
 app.use('/', new RouterBuilder()
     .add(new AuthjwtController())
