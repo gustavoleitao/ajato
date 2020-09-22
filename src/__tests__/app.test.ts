@@ -3,7 +3,11 @@ import SimpleModel from './model/simple.model'
 import EmbedModel from './model/embed.model'
 import RestrictController from './controller/restrict.controller'
 
+import SimpleController from './controller/simple.controller'
+
 const app:Ajato = ajato()
+
+const myInstsamce:SimpleController = new SimpleController()
 
 app.use('/', new RouterBuilder()
     .add(new AuthjwtController())

@@ -6,7 +6,7 @@ import logger from '../util/logger'
 class MongooseManager {
 
     private static instance: MongooseManager
-    private db = mongoose
+    public db = mongoose
 
     private constructor() {
         this.configure()
@@ -30,12 +30,17 @@ class MongooseManager {
 
     public getMongooseModel(amodel:AModel):Model<any>{
         try{
-            return this.mongoose().model(amodel.name())
+            return this.db.model(amodel.name())
         }catch (err){
             logger.debug('Registering model %s', amodel.name())
-            return this.mongoose().model<any>(amodel.name(), amodel.schema())
+            try{
+                return this.db.model<any>(amodel.name(), amodel.schema())
+            }catch (err){
+                logger.warn('Cant register model %s at this time.', amodel.name())
+                throw err
+            }
         }
-    }
+    }   
 
     private registerEvents(){
 
@@ -51,10 +56,6 @@ class MongooseManager {
             logger.info('Database disconnected!')
         })
         
-    }
-
-    public mongoose(){
-        return this.db
     }
 
 }

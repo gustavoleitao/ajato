@@ -9,7 +9,7 @@ before(function (done) {
     })
 })
 
-describe("Testing JWT Authentication", () => {
+describe.skip("Testing JWT Authentication", () => {
 
     let refreshToken:string
     let accessToken:string

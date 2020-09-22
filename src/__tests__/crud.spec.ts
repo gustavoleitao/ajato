@@ -3,7 +3,7 @@ import request from "request"
 
 const baseUrl:string = 'http://localhost:3000'
 
-describe("Testing simple crud", () => {
+describe.skip("Testing simple crud", () => {
 
   let id:string
 

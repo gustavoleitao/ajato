@@ -6,6 +6,7 @@
   "typings": "lib/index",
   "scripts": {
     "start": "node lib/__tests__/app.test.js",
+    "temp": "nodemon src/test.controller.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc -p .",
     "test": "nyc mocha --file ./src/__tests__/setup.ts ./src/__tests__/*.spec.ts"
@@ -49,7 +50,7 @@
     "body-parser": "^1.19.0",
     "deep-parse-json": "^1.0.1",
     "express": "^4.17.1",
-    "express-mquery": "^1.2.10",
+    "express-mquery": "^1.2.12",
     "jsonwebtoken": "^8.5.1",
     "mogoose": "0.0.1-security",
     "mongoose": "^5.10.1",
@@ -57,6 +58,7 @@
     "parent-module": "^2.0.0",
     "parent-package-json": "^2.0.1",
     "read-pkg-up": "^7.0.1",
+    "reflect-metadata": "^0.1.13",
     "winston": "^3.3.3"
   }
 }

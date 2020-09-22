@@ -1,4 +1,4 @@
-import Controller from './arq/controller'
+// import Controller from './arq/controller'
 import CrudController from './controller/crud.controller'
 import UserController from './controller/user.controller'
 import AuthjwtController from './controller/authjwt.controller'
@@ -10,7 +10,7 @@ import RouterBuilder from './util/router.builder'
 import { Schema, SchemaDefinition, Document, Model} from 'mongoose'
 import {AUser, IAUser} from './model/user.model'
 import {Router, Request, Response, NextFunction} from 'express'
-
+import {Controller, Get, Post, Delete, Put, Patch, All} from './decorators/ajato.decorator'
 
 export default function () {return Ajato.getInstance()}
 
@@ -18,7 +18,6 @@ export {
     Ajato, 
     CrudController, 
     UserController,
-    Controller, 
     AuthjwtController, 
     RouterBuilder, 
     AModel, 
@@ -33,5 +32,12 @@ export {
     Router,
     Request,
     Response,
-    NextFunction
+    NextFunction,
+    Controller,
+    Get,
+    Post,
+    Delete, 
+    Patch,
+    Put, 
+    All
 }

@@ -49,7 +49,7 @@ before(function (done) {
     
 })
 
-describe("Testing restrict crud", () => {
+describe.skip("Testing restrict crud", () => {
 
     it("POST /restrict failed", (done) => {
         request.post(baseUrl + '/restrict', { form: { title: 'title-post-teste', body: 'body-post-test' } }, (error, response, body) => {
