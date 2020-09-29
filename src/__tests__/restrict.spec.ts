@@ -1,5 +1,5 @@
 
-import { ok, notEqual, equal } from "assert"
+import { ok, notEqual, strictEqual } from "assert"
 import request from "request"
 
 const baseUrl: string = 'http://localhost:3000'
@@ -49,7 +49,7 @@ before(function (done) {
     
 })
 
-describe.skip("Testing restrict crud", () => {
+describe("Testing restrict crud", () => {
 
     it("POST /restrict failed", (done) => {
         request.post(baseUrl + '/restrict', { form: { title: 'title-post-teste', body: 'body-post-test' } }, (error, response, body) => {
@@ -85,14 +85,14 @@ describe.skip("Testing restrict crud", () => {
         const options = {
             uri: baseUrl + '/restrict',
             method: 'POST',
-            headers: {"Authorization": `Bearer ${accessTokenAdmin}`},
+            headers: {"Authorization": `Bearer ${accessTokenComum}`},
             form: { title: 'title-post-teste', body: 'body-post-test' }
         }
 
         request(options, (error, response, body) => {
             const result = JSON.parse(body)
-            equal(201, response.statusCode)
-            equal(loginIdAdmin, result.createdBy)
+            strictEqual(201, response.statusCode)
+            strictEqual(loginIdComum, result.createdBy)
             done()
         })
 
@@ -109,8 +109,8 @@ describe.skip("Testing restrict crud", () => {
 
         request(options, (error, response, body) => {
             const result = JSON.parse(body)
-            equal(201, response.statusCode)
-            equal(loginIdAdmin, result.createdBy)
+            strictEqual(201, response.statusCode)
+            strictEqual(loginIdAdmin, result.createdBy)
             done()
         })
     })
@@ -126,7 +126,7 @@ describe.skip("Testing restrict crud", () => {
 
         request(options, (error, response, body) => {
             const result = JSON.parse(body)
-            equal(403, response.statusCode)
+            strictEqual(403, response.statusCode)
             done()
         })
 

@@ -59,6 +59,7 @@
     "parent-package-json": "^2.0.1",
     "read-pkg-up": "^7.0.1",
     "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.3.0",
     "winston": "^3.3.3"
   }
 }

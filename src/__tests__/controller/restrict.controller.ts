@@ -1,33 +1,47 @@
-import { CrudController, Model, Router, Request, Response, NextFunction} from "../.."
-import authMiddleware from '../../middleware/auth.middleware'
+import { injectable } from "tsyringe";
+import { Request, Response } from "../.."
+import MongooseManager from "../../datasource/datasource.mongo";
+import { Auth, Controller, Post } from "../../decorators/ajato.decorator";
+import { AUser } from "../../model/user.model";
+import RestricModel from "../model/restrict.model";
+import SimpleModel from "../model/simple.model";
 
-class RestrictController extends CrudController {
+@injectable()
+@Controller('/restrict')
+class RestrictController {
 
-    public add(router:Router){
-        super.add(router)
-        this.postAdmin(this.Model, router)
+    protected AjatoModel?: any
+
+    constructor(amodel: RestricModel) {
+        this.AjatoModel = MongooseManager.getInstance().getMongooseModel(amodel)
     }
 
-    protected post(Model:Model<any>, router:Router){
-        super.post(Model, router, ['$logged'])
+    @Post('/admin')
+    @Auth(['admin'])
+    protected async postAdmin(req: Request, res: Response){
+        await this.post(req, res);
     }
 
-    protected postAdmin(Model:Model<any>, router:Router){
-        router.post(`/admin`, authMiddleware(['admin']), async (req: Request, res: Response, nextFunction:NextFunction) => {
-            try{
-                const localModel = new Model(req.body)
-                let doc = await localModel.save()
-                res.status(201).send(doc)
-            }catch (err){
-                if (err.message !== undefined) {
-                    res.status(422)
-                        .header('X-Status-Reason', 'Validation failed')
-                        .send({error: 'Validation failed', message: err.message})
-                }else{
-                    res.status(500).send(err)
-                }
+    @Post('/')
+    @Auth()
+    protected async postComum(req: Request, res: Response){
+        await this.post(req, res);
+    }
+
+    private async post(req:Request, res: Response<any>) {
+        try {
+            const localModel = new this.AjatoModel(req.body)
+            let doc = await localModel.save()
+            res.status(201).send(doc)
+        } catch (err) {
+            if (err.message !== undefined) {
+                res.status(422)
+                    .header('X-Status-Reason', 'Validation failed')
+                    .send({ error: 'Validation failed', message: err.message })
+            } else {
+                res.status(500).send(err)
             }
-        })
+        }
     }
 }
 

@@ -32,7 +32,7 @@ describe("Testing simple crud v2", () => {
         request.get(baseUrl + '/simplev2', (error, response, body) => {
             const result = JSON.parse(body)
             strictEqual(200, response.statusCode)
-            strictEqual(1, result.total)
+            strictEqual(result.total, 1)
             done()
         })
     })
@@ -41,8 +41,8 @@ describe("Testing simple crud v2", () => {
         request.patch(baseUrl + `/simplev2/${id}`, {form:{body: 'body-post-test-after-patch'}}, (error, response, body) => {
             const result = JSON.parse(body)
             strictEqual(200, response.statusCode)
-            strictEqual(1, result.nModified)
-            strictEqual(1, result.ok)
+            strictEqual(result.nModified, 1, )
+            strictEqual(result.ok, 1)
     
             request.get(baseUrl + `/simplev2/${id}`, (error, req, body) => {
                 const resultGet = JSON.parse(body)
@@ -57,8 +57,8 @@ describe("Testing simple crud v2", () => {
         request.put(baseUrl + `/simplev2/${id}`, {form:{body: 'body-post-test-after-put'}}, (error, response, body) => {
             const result = JSON.parse(body)
             strictEqual(200, response.statusCode)
-            strictEqual(1, result.nModified)
-            strictEqual(1, result.ok)
+            strictEqual(result.nModified, 1)
+            strictEqual(result.ok, 1)
             request.get(baseUrl + `/simplev2/${id}`, (error, req, body) => {
                 const resultGet = JSON.parse(body)
                 strictEqual('body-post-test-after-put', resultGet.body)
@@ -72,8 +72,8 @@ describe("Testing simple crud v2", () => {
         request.delete(baseUrl + `/simplev2/${id}`, (error, response, body) => {
             const result = JSON.parse(body)
             strictEqual(200, response.statusCode)
-            strictEqual(1, result.deletedCount)
-            strictEqual(1, result.ok)
+            strictEqual(result.deletedCount, 1)
+            strictEqual(result.ok, 1)
             done()
         })
       })

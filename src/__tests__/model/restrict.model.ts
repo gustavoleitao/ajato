@@ -5,8 +5,8 @@ interface IPost extends Document {
   body: string
 }
 
-class SimpleModel extends AModel {
-  name = () => 'Simple'
+class RestricModel extends AModel {
+  name = () => 'Restric'
   schemaDefinition = () =>  {
     return {
       title: {
@@ -21,4 +21,4 @@ class SimpleModel extends AModel {
   }
 }
 
-export = SimpleModel
+export = RestricModel

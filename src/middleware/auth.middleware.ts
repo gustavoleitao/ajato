@@ -22,7 +22,6 @@ function authMiddleware(roles:string[]): RequestHandler {
                 res.status(403).send({error: "Failed to authenticate"})
                 return
             }else{
-                
                 const isAuthorizaded = authorizationMiddleware(roles, reqAuth.user)
                 if (!isAuthorizaded){
                     res.status(403).send({error: "Unauthorizaded"})

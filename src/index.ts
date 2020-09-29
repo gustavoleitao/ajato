@@ -1,5 +1,4 @@
-// import Controller from './arq/controller'
-import CrudController from './controller/crud.controller'
+import "reflect-metadata"
 import UserController from './controller/user.controller'
 import AuthjwtController from './controller/authjwt.controller'
 import Middleware from './arq/middleware'
@@ -11,12 +10,15 @@ import { Schema, SchemaDefinition, Document, Model} from 'mongoose'
 import {AUser, IAUser} from './model/user.model'
 import {Router, Request, Response, NextFunction} from 'express'
 import {Controller, Get, Post, Delete, Put, Patch, All} from './decorators/ajato.decorator'
+import CrudController from "./controller/crud.controller"
+import GenericController from "./controller/generic.controller"
 
 export default function () {return Ajato.getInstance()}
 
 export {
     Ajato, 
     CrudController, 
+    GenericController,
     UserController,
     AuthjwtController, 
     RouterBuilder, 

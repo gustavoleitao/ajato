@@ -1,4 +1,5 @@
 import { Schema, SchemaDefinition, Document } from 'mongoose'
+import { injectable } from 'tsyringe'
 import { AModel } from '../arq/amodel'
 import {Role, IRole} from './role.model'
 
@@ -12,7 +13,12 @@ interface IAUser extends Document {
     roles: [IRole]
 }
 
+@injectable()
 class AUser extends AModel {
+
+    constructor(){
+        super()
+    }
 
     name = () => 'User'
     

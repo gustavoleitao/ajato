@@ -4,11 +4,11 @@ import HttpMethod from '../arq/httpmethods'
 function Controller(path:string) {
     return function(target: Function){
         const superClass = Object.getPrototypeOf(target).name
-        Metadata.getInstance().registerPaths(target.name, path, superClass)
+        Metadata.getInstance().registerPaths(target.name, path, target, superClass)
     }
 }
 
-function Auth(roles:string[]=['$loged']){
+function Auth(roles:string[]=['$logged']){
   return function (
     target: any,
     propertyKey: string,

@@ -1,34 +1,19 @@
-import ajato, {Ajato, RouterBuilder, CrudController, AuthjwtController, AUser, UserController} from '../index'
-import SimpleModel from './model/simple.model'
-import EmbedModel from './model/embed.model'
-
+import ajato, {Ajato, UserController} from '../index'
 import RestrictController from './controller/restrict.controller'
 import SimpleController from './controller/simple.controller'
 import RestrictV2Controller from './controller/restrictv2.controller'
+import RoleController from '../controller/role.controller'
+import EmbedController from './controller/embed.controller'
+import AuthJwtController from '../controller/authjwt.controller'
 
 const app:Ajato = ajato()
 
-app.add(new SimpleController())
-app.add(new RestrictV2Controller())
-
-app.use('/', new RouterBuilder()
-    .add(new AuthjwtController())
-    .routes())
-
-app.use('/simple', new RouterBuilder()
-    .add(new CrudController(new SimpleModel()))
-    .routes())
-
-app.use('/embed', new RouterBuilder()
-    .add(new CrudController(new EmbedModel()))
-    .routes())
-
-app.use('/restrict', new RouterBuilder()
-    .add(new RestrictController(new SimpleModel()))
-    .routes())
-
-app.use('/user', new RouterBuilder()
-    .add(new UserController())
-    .routes())
+app.add(RestrictV2Controller)
+app.add(RestrictController)
+app.add(UserController)
+app.add(RoleController)
+app.add(SimpleController)
+app.add(EmbedController, '/embed')
+app.add(AuthJwtController)
 
 export = app

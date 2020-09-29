@@ -1,7 +1,10 @@
-import {Router, Response, Request, NextFunction} from 'express'
+import {Router, Response, Request} from 'express'
+import { UserController } from '..';
+import { Controller, Get } from '../decorators/ajato.decorator';
 
 const readPkgUp = require('read-pkg-up')
 
+@Controller("/")
 class RootController {
 
     private readonly startup: { startUp: Date; name: string; description: string; version: string };
@@ -11,14 +14,9 @@ class RootController {
         this.startup = {startUp: new Date(), name: contentOfParent.name, description: contentOfParent.description, version: contentOfParent.version}
     }
 
-    add(router: Router) {
-        this._startup(router)
-    }
-
-    _startup(router: Router) {
-        router.get('/', (req, res) => {
-            res.status(200).json(this.startup)
-        })
+    @Get('/')
+    public root(req:Request, res:Response){
+        res.status(200).json(this.startup)
     }
 
 }

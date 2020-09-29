@@ -1,4 +1,4 @@
-import ajato, {Ajato, AModel, Schema, Document} from '../../index'
+import { AModel } from '../../index'
 
 class SubDocumentModel extends AModel {
 
@@ -11,7 +11,6 @@ class SubDocumentModel extends AModel {
           }
         }
       }
-
 }
 
 class EmbedModel extends AModel {

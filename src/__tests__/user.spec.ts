@@ -1,14 +1,14 @@
-import { equal, notEqual, ok } from "assert"
+import { strictEqual, ok } from "assert"
 import request from "request"
 
 const baseUrl:string = 'http://localhost:3000'
 
-describe.skip("Testing User API", () => {
+describe("Testing User API", () => {
 
     it("POST /user ok", (done) => {
 
         request.post(baseUrl + '/user', {form:{name: 'Alan Turing', username: 'alan', realm: 'ajato', email: 'alan@gmail.com', password: 'enigma'}}, (error, response, body) => {
-            equal(201, response.statusCode)
+            strictEqual(201, response.statusCode)
             done()
         })
 
@@ -26,7 +26,7 @@ describe.skip("Testing User API", () => {
       it("POST /user other realm same username", (done) => {
 
         request.post(baseUrl + '/user', {form:{name: 'Alan Greenspan', username: 'alan', realm: 'other', email: 'alan.greenspan@gmail.com', password: 'greenspa'}}, (error, response, body) => {
-            equal(201, response.statusCode)
+            strictEqual(201, response.statusCode)
             done()
         })
 
@@ -35,7 +35,7 @@ describe.skip("Testing User API", () => {
       it("POST /user same email other realm", (done) => {
 
         request.post(baseUrl + '/user', {form:{name: 'Alan Moore', username: 'alan.moore', realm: 'other', email: 'alan@gmail.com', password: 'moore'}}, (error, response, body) => {
-            equal(201, response.statusCode)
+            strictEqual(201, response.statusCode)
             done()
         })
 
