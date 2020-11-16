@@ -66,7 +66,7 @@ export default class SimpleController extends GenericController {
 }
 ```
 
-The controllers shold use @Controller decorator to inform to ajato that is a controller and also the @injectable decorator to allow the ajato resolve Class and create an instance.
+The controllers should use @Controller decorator to inform to ajato that is a controller and also the @injectable decorator to allow the ajato resolve Class and create an instance.
 
 Next step is register the new Controller:
 
