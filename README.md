@@ -4,7 +4,7 @@ Ajato is a simple library to write web-based microservices in [Typescript](https
 
 ## Why use Ajato?
 
-Ajato is simple, fast and small! Ajato uses Mongoose Schema to model your data. You just need write model and Ajato create the API for you.
+Ajato is simple, fast and small! Ajato uses Mongoose Schema to model your data. You just need write model and controller and Ajato create the API for you.
 
 ## Getting start
 
@@ -22,7 +22,7 @@ app.start()
 
 ## Creating models
 
-You have to extends AModel class and implement abstract methods.
+You need to extends AModel class and implement abstract methods.
 
 ```typescript
 import {AModel} from 'ajato'
@@ -44,22 +44,37 @@ export default class SimpleModel extends AModel {
 }
 ```
 
-The shmema definition uses moogoose sintaxe. More infos in https://mongoosejs.com/docs/guide.html#definition
+The schema definition uses moogoose sintaxe. More infos in https://mongoosejs.com/docs/guide.html#definition
 
 ## Creating CRUD Operations
 
-Once you have defined the model, you just need to use the CrudController class to create CRUD operations.
+Once you have defined the model, you just need create a Controller that extends GenericController.
 
 ```typescript
-import ajato, {CrudController} from 'ajato'
-import SimpleModel from './model/simple.model'
+import { Controller, GenericController } from 'ajato'
+import SimpleModel from "./model/simple.model"
+import { injectable } from "tsyringe"
 
+@Controller('/simplev')
+@injectable()
+export default class SimpleController extends GenericController {
+
+    constructor(model: SimpleModel) {
+        super(model)
+    }
+
+}
+```
+
+The controllers shold use @Controller decorator to inform to ajato that is a controller and also the @injectable decorator to allow the ajato resolve Class and create an instance.
+
+Next step is register the new Controller:
+
+```typescript
+import ajato, {Ajato} from 'ajato'
+import SimpleController from './controller/simple.controller'
 const app:Ajato = ajato()
-
-app.use('/simple', new RouterBuilder()
-    .add(new CrudController(new SimpleModel()))
-    .routes())
-
+app.add(SimplController)
 app.start()
 ```
 
@@ -67,32 +82,50 @@ app.start()
 
 Ajato implements [JWT Token](https://jwt.io/) natively to authentication and authorization:
 
+To add JWT routes and user management, you need register UserController and AuthJwtController:
+
 ```typescript
-import ajato, {Ajato, RouterBuilder, AuthjwtController} from 'ajato'
+import ajato, {Ajato, AuthJwtController, UserController} from 'ajato'
 const app:Ajato = ajato()
-
-app.use('/', new RouterBuilder()
-    .add(new AuthjwtController())
-    .routes())
-
+app.add(AuthJwtController)
+app.add(UserController)
 app.start()
 ```
 
-Once you have authentication enabled, it is important manage the users. To do that, Ajato provides a basic user model and controller:
+Once you have authentication enabled, you can protect a controller method through @Auth decorator.
 
 ```typescript
-import ajato, {Ajato, RouterBuilder, AuthjwtController, UserController} from 'ajato'
-const app:Ajato = ajato()
 
-app.use('/', new RouterBuilder()
-    .add(new AuthjwtController())
-    .routes())
+import { injectable } from "tsyringe";
+import { Request, Response, MongooseManager, Auth, Controller, Post} from 'ajato'
+import RestricModel from "./model/restrict.model"; //some model
 
-app.use('/user', new RouterBuilder()
-    .add(new UserController())
-    .routes())
+@injectable()
+@Controller('/restrict')
+class RestrictController {
 
-app.start()
+    protected AjatoModel?: any
+
+    constructor(amodel: RestricModel) {
+        this.AjatoModel = MongooseManager.getInstance().getMongooseModel(amodel)
+    }
+
+    @Post('/')
+    @Auth()
+    protected async postComum(req: Request, res: Response){
+        //Only authenticated users can do this
+    }
+
+    @Post('/admin')
+    @Auth(['admin', 'master'])
+    protected async postAdmin(req: Request, res: Response){
+       //Only authenticated users with admin or master role can do this
+    }
+
+}
+
+export = RestrictController
+
 ```
 
 ## Options
