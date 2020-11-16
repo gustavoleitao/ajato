@@ -33,12 +33,12 @@ class UserController {
     }
 
     @Get()
-    get(req:Request, res:Response){
+    async get(req:Request, res:Response){
         this.userCrudController.get(req, res)
     }
 
     @Get('/:id')
-    getById(req:Request, res:Response){
+    async getById(req:Request, res:Response){
         this.userCrudController.getById(req, res)
     }
 
@@ -55,7 +55,7 @@ class UserController {
     }
 
     @Delete('/:id')
-    delete(req:Request, res:Response){
+    async delete(req:Request, res:Response){
         this.userCrudController.delete(req, res)
     }
 

@@ -85,12 +85,12 @@ function All(path:string="/") {
 }
 
 export {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Put,
-  Delete,
-  All,
-  Auth
+  Controller as Controller,
+  Get as Get,
+  Post as Post,
+  Patch as Patch,
+  Put as Put,
+  Delete as Delete,
+  All as All,
+  Auth as Auth
 }

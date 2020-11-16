@@ -2,9 +2,7 @@ import { injectable } from "tsyringe";
 import { Request, Response } from "../.."
 import MongooseManager from "../../datasource/datasource.mongo";
 import { Auth, Controller, Post } from "../../decorators/ajato.decorator";
-import { AUser } from "../../model/user.model";
 import RestricModel from "../model/restrict.model";
-import SimpleModel from "../model/simple.model";
 
 @injectable()
 @Controller('/restrict')

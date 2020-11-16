@@ -5,9 +5,9 @@ import { injectable } from "tsyringe";
 
 @Controller('/simplev2')
 @injectable()
-class SimpleController extends GenericController{
+class SimpleController extends GenericController {
 
-    constructor(model:SimpleModel){
+    constructor(model: SimpleModel) {
         super(model)
     }
 
