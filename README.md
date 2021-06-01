@@ -4,7 +4,7 @@ Ajato is a simple library to write web-based microservices in [Typescript](https
 
 ## Why use Ajato?
 
-Ajato is simple, fast and small! Ajato uses Mongoose Schema to model your data. You just need write model and controller and Ajato create the API for you.
+Ajato is simple, fast and small! Ajato uses Mongoose Schema to model your data. You just need write model and controller and Ajato will create the API for you.
 
 ## Getting start
 
